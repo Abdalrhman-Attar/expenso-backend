@@ -20,5 +20,5 @@ app.use("/api/categories", categoriesRouter);
 app.use("/api/notifications", notificationsRouter);
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server listening on http://localhost:${PORT}`);
+  console.log(`Server listening on http://localhost:${PORT}`);
 });
