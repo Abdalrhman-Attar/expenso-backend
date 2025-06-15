@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS public.transactions (
   description      TEXT        NOT NULL,
   amount           NUMERIC(12,2) NOT NULL,
   date             DATE        NOT NULL,
+  type             TEXT        NOT NULL,  
   is_recurring     BOOLEAN     NOT NULL DEFAULT FALSE,
   recurrence_rule  TEXT,
   created_at       TIMESTAMPTZ NOT NULL DEFAULT now(),
