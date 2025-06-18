@@ -37,6 +37,11 @@ router.post("/", async (req, res) => {
     VALUES ($1,$2,$3,$4,$5,$6)
     RETURNING *`;
   const { rows } = await client.query(insert, [req.userId, description, amount, type, category_id, date]);
+  await client.query(
+    `INSERT INTO notifications (user_id, message, type, scheduled_for)
+     VALUES ($1, $2, $3, now())`,
+    [req.userId, `Transaction "${description}" created`, "info"]
+  );
   res.status(201).json(rows[0]);
 });
 
@@ -53,6 +58,11 @@ router.put("/:id", async (req, res) => {
     RETURNING *`;
   const { rows } = await client.query(update, [description, amount, type, category_id, date, req.params.id, req.userId]);
   if (!rows.length) return res.status(404).json({ message: "Not Found" });
+  await client.query(
+    `INSERT INTO notifications (user_id, message, type, scheduled_for)
+     VALUES ($1, $2, $3, now())`,
+    [req.userId, `Transaction "${description}" updated`, "info"]
+  );
   res.json(rows[0]);
 });
 
@@ -60,6 +70,11 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   const { rowCount } = await client.query("DELETE FROM transactions WHERE id=$1 AND user_id=$2", [req.params.id, req.userId]);
   if (rowCount === 0) return res.status(404).json({ message: "Not Found" });
+  await client.query(
+    `INSERT INTO notifications (user_id, message, type, scheduled_for)
+     VALUES ($1, $2, $3, now())`,
+    [req.userId, `Transaction deleted`, "warning"]
+  );
   res.sendStatus(204);
 });
 
