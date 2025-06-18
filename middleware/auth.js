@@ -11,7 +11,7 @@ const authMiddleware = auth({
 
 export const checkJwt = (req, res, next) => {
   if (req.method === "OPTIONS") {
-    return next(); // Skip authentication for OPTIONS requests
+    return next();
   }
   return authMiddleware(req, res, next);
 };

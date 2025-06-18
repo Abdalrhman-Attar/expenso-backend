@@ -12,16 +12,26 @@ import { checkJwt, requireUser } from "./middleware/auth.js";
 
 dotenv.config();
 
-const corsOptions = {
-  origin: "https://expensofrontend-production.up.railway.app",
-  credentials: true,
-  allowedHeaders: ["Authorization", "Content-Type"],
-  methods: "GET,POST,PUT,DELETE,OPTIONS",
-};
+app.use((req, res, next) => {
+  if (req.method === "OPTIONS") {
+    res.set("Access-Control-Allow-Origin", "https://expensofrontend-production.up.railway.app");
+    res.set("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+    res.set("Access-Control-Allow-Headers", "Authorization,Content-Type");
+    res.set("Access-Control-Allow-Credentials", "true");
+    return res.sendStatus(200);
+  }
+  next();
+});
 
 const app = express();
 app.use(morgan("dev"));
-app.use(cors(corsOptions));
+
+app.use(
+  cors({
+    origin: "https://expensofrontend-production.up.railway.app",
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 const PORT = process.env.PORT || 3002;
