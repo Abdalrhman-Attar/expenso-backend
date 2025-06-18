@@ -60,4 +60,33 @@ router.patch("/me", checkJwt, async (req, res) => {
   }
 });
 
+router.post("/upgrade", checkJwt, async (req, res) => {
+  const auth0Id = req.auth.payload.sub;
+  try {
+    // 1. Get all roles
+    const roles = await auth0.getRoles();
+    const premiumRole = roles.find((r) => r.name === "Premium");
+    if (!premiumRole) return res.status(400).json({ message: "Premium role not found in Auth0" });
+
+    // 2. Assign role to user
+    await auth0.assignRolesToUser({ id: auth0Id }, { roles: [premiumRole.id] });
+
+    // 3. Update local DB
+    const update = `
+      UPDATE users
+      SET subscription='Premium',
+          updated_at=now()
+      WHERE auth0_id=$1
+      RETURNING id, auth0_id, name, email, subscription, updated_at
+    `;
+    const { rows } = await client.query(update, [auth0Id]);
+    if (!rows.length) return res.status(404).json({ message: "User not found" });
+
+    res.json(rows[0]);
+  } catch (err) {
+    console.error("Failed to upgrade to Premium:", err);
+    res.status(500).json({ message: "Server error upgrading user" });
+  }
+});
+
 export default router;
