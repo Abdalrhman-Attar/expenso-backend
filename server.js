@@ -12,12 +12,10 @@ import { checkJwt, requireUser } from "./middleware/auth.js";
 
 dotenv.config();
 
-
-
 const app = express();
 app.use((req, res, next) => {
   if (req.method === "OPTIONS") {
-    res.set("Access-Control-Allow-Origin", "https://expensofrontend-production.up.railway.app");
+    res.set("Access-Control-Allow-Origin", "*");
     res.set("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
     res.set("Access-Control-Allow-Headers", "Authorization,Content-Type");
     res.set("Access-Control-Allow-Credentials", "true");
