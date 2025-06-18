@@ -15,13 +15,13 @@ dotenv.config();
 const corsOptions = {
   origin: "https://expensofrontend-production.up.railway.app",
   credentials: true,
+  allowedHeaders: ["Authorization", "Content-Type"],
+  methods: "GET,POST,PUT,DELETE,OPTIONS",
 };
 
 const app = express();
 app.use(morgan("dev"));
-
 app.use(cors(corsOptions));
-
 app.use(express.json());
 
 const PORT = process.env.PORT || 3002;

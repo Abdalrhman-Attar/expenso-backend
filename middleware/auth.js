@@ -4,12 +4,22 @@ import client from "../db.js";
 
 dotenv.config();
 
-export const checkJwt = auth({
+const authMiddleware = auth({
   audience: process.env.AUTH0_AUDIENCE,
   issuerBaseURL: `https://${process.env.AUTH0_DOMAIN}/`,
 });
 
+export const checkJwt = (req, res, next) => {
+  if (req.method === "OPTIONS") {
+    return next(); // Skip authentication for OPTIONS requests
+  }
+  return authMiddleware(req, res, next);
+};
+
 export async function requireUser(req, res, next) {
+  if (!req.auth || !req.auth.payload) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
   try {
     const auth0Id = req.auth.payload.sub;
     const { rows } = await client.query("SELECT id FROM users WHERE auth0_id = $1", [auth0Id]);
