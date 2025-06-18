@@ -37,7 +37,7 @@ AUTH0_MGMT_CLIENT_SECRET=your-management-client-secret
 ### 3. Start the server
 
 ```bash
-npm run dev
+npm start
 ```
 
 The API will be available at `http://localhost:3001`
