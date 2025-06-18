@@ -15,6 +15,7 @@ dotenv.config();
 const app = express();
 app.use(morgan("dev"));
 app.use(cors());
+app.options("*", cors());
 app.use(express.json());
 
 const PORT = process.env.PORT || 3002;
