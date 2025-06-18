@@ -13,7 +13,7 @@ This is the backend server for the Expenso personal finance tracker. It exposes 
 
 ---
 
-## 🚀 Getting Started
+## ✨ Getting Started
 
 ### 1. Install dependencies
 
@@ -37,7 +37,7 @@ AUTH0_MGMT_CLIENT_SECRET=your-management-client-secret
 ### 3. Start the server
 
 ```bash
-npm start
+npm run dev
 ```
 
 The API will be available at `http://localhost:3001`
@@ -65,6 +65,19 @@ Authorization: Bearer <token>
 | PATCH  | `/api/users/me`      | Update name or subscription                    |
 | POST   | `/api/users/upgrade` | Upgrade to Premium role (Auth0 + DB)           |
 
+#### Example response from `GET /api/users/me`
+
+```json
+{
+  "id": "a1b2c3",
+  "auth0_id": "auth0|xyz",
+  "name": "Jane Doe",
+  "email": "jane@example.com",
+  "subscription": "Standard",
+  "created_at": "2025-06-18T00:00:00.000Z"
+}
+```
+
 ### 💸 Transactions
 
 | Method | Endpoint                | Description                |
@@ -75,7 +88,24 @@ Authorization: Bearer <token>
 | PUT    | `/api/transactions/:id` | Update a transaction       |
 | DELETE | `/api/transactions/:id` | Delete a transaction       |
 
-### 🗂️ Categories
+#### Example response from `POST /api/transactions`
+
+```json
+{
+  "id": "tx123",
+  "user_id": "user123",
+  "category_id": "cat456",
+  "description": "Grocery shopping",
+  "amount": 75.50,
+  "type": "Expense",
+  "date": "2025-06-18",
+  "is_recurring": false,
+  "created_at": "2025-06-18T12:00:00.000Z",
+  "updated_at": "2025-06-18T12:00:00.000Z"
+}
+```
+
+### 📂 Categories
 
 | Method | Endpoint              | Description                   |
 | ------ | --------------------- | ----------------------------- |
@@ -84,6 +114,21 @@ Authorization: Bearer <token>
 | POST   | `/api/categories`     | Create a new category         |
 | PUT    | `/api/categories/:id` | Update a category             |
 | DELETE | `/api/categories/:id` | Delete a category (if unused) |
+
+#### Example response from `GET /api/categories`
+
+```json
+[
+  {
+    "id": "cat1",
+    "user_id": "user1",
+    "name": "Utilities",
+    "type": "Expense",
+    "created_at": "2025-06-18T00:00:00.000Z",
+    "updated_at": "2025-06-18T00:00:00.000Z"
+  }
+]
+```
 
 ### 🔔 Notifications
 
@@ -94,6 +139,21 @@ Authorization: Bearer <token>
 | POST   | `/api/notifications`     | Create a new notification   |
 | PUT    | `/api/notifications/:id` | Update a notification       |
 | DELETE | `/api/notifications/:id` | Delete a notification       |
+
+#### Example response from `POST /api/notifications`
+
+```json
+{
+  "id": "note123",
+  "user_id": "user123",
+  "message": "Your balance is low!",
+  "type": "Alert",
+  "is_read": false,
+  "scheduled_for": null,
+  "created_at": "2025-06-18T12:00:00.000Z",
+  "updated_at": "2025-06-18T12:00:00.000Z"
+}
+```
 
 ---
 
