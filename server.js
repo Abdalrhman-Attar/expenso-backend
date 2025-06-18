@@ -22,8 +22,6 @@ app.use(morgan("dev"));
 
 app.use(cors(corsOptions));
 
-app.options("/*splat", cors(corsOptions));
-
 app.use(express.json());
 
 const PORT = process.env.PORT || 3002;
