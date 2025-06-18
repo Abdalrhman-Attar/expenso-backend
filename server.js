@@ -12,17 +12,9 @@ import { checkJwt, requireUser } from "./middleware/auth.js";
 
 dotenv.config();
 
-const corsOptions = {
-  origin: "https://expensofrontend-production.up.railway.app",
-  credentials: true,
-};
-
 const app = express();
 app.use(morgan("dev"));
-
-app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
-
+app.use(cors());
 app.use(express.json());
 
 const PORT = process.env.PORT || 3002;
