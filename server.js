@@ -14,7 +14,12 @@ dotenv.config();
 
 const app = express();
 app.use(morgan("dev"));
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://expensofrontend-production.up.railway.app",
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 const PORT = process.env.PORT || 3002;
